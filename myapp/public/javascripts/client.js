@@ -2,7 +2,6 @@ var canvas = document.getElementById("gameCanvas");
 var context = canvas.getContext("2d");
 
 
-
 function drawOnCanvas(player, position){
     var y=Math.floor(position/10);
     var x=Math.floor(position%10)-1;
@@ -54,12 +53,9 @@ var playerTag;
 var gameId;
 function startGame(numPlayers){
     document.getElementById("playerButtons").remove();
+    var rollDiceButton = document.getElementById("rollDiceButton");
+
     console.log("Starting a " + numPlayers + " player game");
-    
-    drawOnCanvas(1,0);
-    drawOnCanvas(2,0);
-    drawOnCanvas(3,0);
-    drawOnCanvas(4,0);
 
     socket = new WebSocket("ws://localhost:3000");
     socket.onopen = function(){
@@ -68,6 +64,7 @@ function startGame(numPlayers){
                 type: "initialize",
                 numPlayers: numPlayers
         }));
+        console.log("sent initlialize packet");
     }
 
 
@@ -80,6 +77,9 @@ function startGame(numPlayers){
             case "gameJoin":
                 console.log("We are player " + json.playerTag + " in gameId " + json.gameId);
                 playerTag = json.playerTag;
+                if(playerTag != "A"){
+                    rollDiceButton.disabled = true;
+                }
                 gameId = json.gameId;
                 break;
             case "gameUpdate":
@@ -104,7 +104,13 @@ function startGame(numPlayers){
                         break;
 
                 }
-
+                break;
+            case "disableRoll":
+                rollDiceButton.disabled = true;
+                break;
+            case "enableRoll":
+                rollDiceButton.disabled = false;
+                break;
         }
     }
 }

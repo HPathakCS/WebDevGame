@@ -30,6 +30,7 @@ initializeBoard();
 //     playerBPos: value,
 //     playerCPos: value,
 //     playerDPos: value,
+//     currentTurn; //"A", "B", "C", "D"
 //     gameState: //"Completed", "Waiting", "Ongoing"
 // }
 
@@ -49,19 +50,19 @@ socketServer.on("connection", function(ws){
             switch(msg.player){
                     case "A":
                         currPos = game.playerAPos;
-                        game.playerAPos = validateMove(currPos + diceResult);
+                        game.playerAPos = (validateMove(currPos + diceResult) === -2) ? currPos:validateMove(currPos+diceResult);
                         break;
                     case "B":
                         currPos = game.playerBPos;
-                        game.playerBPos = validateMove(currPos + diceResult);
+                        game.playerBPos = (validateMove(currPos + diceResult) === -2) ? currPos:validateMove(currPos+diceResult);
                         break;
                     case "C":
                         currPos = game.playerCPos;
-                        game.playerCPos = validateMove(currPos + diceResult);
+                        game.playerCPos = (validateMove(currPos + diceResult) === -2) ? currPos:validateMove(currPos+diceResult);
                         break;
                     case "D":
                         currPos = game.playerDPos;
-                        game.playerDPos = validateMove(currPos + diceResult);
+                        game.playerDPos = (validateMove(currPos + diceResult) === -2) ? currPos:validateMove(currPos+diceResult);
                         break;
                 }
                 switch(game.numPlayers){
@@ -73,6 +74,23 @@ socketServer.on("connection", function(ws){
                          });
                         game.playerA.send(gameUpdate);
                         game.playerB.send(gameUpdate);
+                        if(game.CurrentTurn == "A"){
+                            game.playerA.send(JSON.stringify({
+                                type: "disableRoll"
+                            }));
+                            game.playerB.send(JSON.stringify({
+                                type: "enableRoll"
+                            }));
+                            game.CurrentTurn = "B";
+                        }else{
+                            game.playerB.send(JSON.stringify({
+                                type: "disableRoll"
+                            }));
+                            game.playerA.send(JSON.stringify({
+                                type: "enableRoll"
+                            }));
+                            game.CurrentTurn = "A";
+                        }
                         break;
                     case 3:
                         var gameUpdate = JSON.stringify({
@@ -164,6 +182,7 @@ socketServer.on("connection", function(ws){
                         playerBPos: 1,
                         playerCPos: 1,
                         playerDPos: 1,
+                        CurrentTurn: "A",
                         gameState: "Waiting"
                     });
 
@@ -199,10 +218,14 @@ function initializeBoard(){
 }
 
 function validateMove(position){
-    if(board[position] == -1){
-        return position;
+    if(position < 100 || position === 100){
+        if(board[position] == -1){
+            return position;
+        }else{
+            return board[position];
+        }
     }else{
-        return board[position];
+        return -2;
     }
 }
 
