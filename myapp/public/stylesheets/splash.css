@@ -1,0 +1,94 @@
+html, body, main, section {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+  }
+
+body{
+    background-color: gray;
+}
+
+button{
+    position: absolute;
+    background-color: red;
+    color: whitesmoke;
+    font-size: 500%;
+    border: none;
+    padding: 20px;
+    bottom: 150px;
+    right: 325px;
+}
+
+button:hover{
+    background-color: black;
+    transform: scale(1.2) rotateZ(-5deg);
+    transition: all 2s ease;
+}
+
+h1 {
+    position: absolute;
+    font-size: 400%;
+    top: 75px;
+    left: 50px;
+    color: white;
+}
+
+#left {
+    float: left;
+    width: 70%;
+    background-color: #AAA;
+}
+
+h3{
+    position: relative;
+    color: white;
+    left: 50px;
+    border: none;
+    top: 550px;
+}
+
+h2{
+    position: relative;
+    color: white;
+    left: 50px;
+    border: none;
+    top: 550px;
+}
+
+h3::before{
+    content: "👌🏻 ";
+}
+
+h3::after{
+    content: " 👌🏾";
+}
+
+@keyframes button-slide{
+    0% {
+        transform: translateX(2000px) scaleX(2) scaleY(0.5);
+        filter: blur(50px);
+        opacity: 0;
+    }
+    100%{
+        transform: translateX(0) scaleX(1) scaleY(1)
+    }
+}
+
+.button-slide-play{
+    animation: button-slide 0.5s cubic-bezier(.39,.01,.62,.99)
+}
+
+@keyframes slide-bottom{
+    0% {
+        transform: translateY(2000px) scaleY(2) scaleX(0.5);
+        filter: blur(50px);
+        opacity: 0;
+    }
+    100%{
+        transform: translateX(0) scaleX(1) scaleY(1)
+    }
+}
+
+.slide-bottom{
+    animation: slide-bottom 5s cubic-bezier(.39,.01,.62,.99)
+}

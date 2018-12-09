@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Snakes & Ladders</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/game.css">
 </head>
 <h1>Snakes and Ladders</h1>
 <section id="playerButtons">
@@ -14,10 +14,15 @@
     <button id="4player" onclick="startGame(4)">4 Player</button>
 </section>
 <section id="right">
-    <h2>State: Waiting</h2>
-    <h2>Connected Players: </h2>
-    <h2>You: </h2>
-    <button id="rollDiceButton" onclick="rollDice()">Roll Dice</button>
+    <div>
+        <h2>State: </h2>
+        <h2 id="statusText"></h2>
+    </div>
+    <div>
+        <h2>You: </h2>
+        <h2 id="colorText"></h2>
+    </div>
+    <button id="rollDiceButton" onclick="rollDice()" hidden>Roll Dice</button>
 </section>
 <body>
     <canvas id="gameCanvas" width="900" height="900"></canvas>

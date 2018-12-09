@@ -31,10 +31,12 @@ initializeBoard();
 //     playerCPos: value,
 //     playerDPos: value,
 //     currentTurn; //"A", "B", "C", "D"
-//     gameState: //"Completed", "Waiting", "Ongoing"
+//     winner: 
+//     gameState: //"Completed", "Waiting", "Ongoing", "Abandon"
 // }
 
 socketServer.on("connection", function(ws){
+    kek();
     console.log("Connection made");
     ws.on("message", function incoming(message) {
         var msg = JSON.parse(message);
@@ -67,56 +69,197 @@ socketServer.on("connection", function(ws){
                 }
                 switch(game.numPlayers){
                     case 2:
-                        var gameUpdate = JSON.stringify({
-                            type: "gameUpdate",
-                            playerAPos: game.playerAPos,
-                            playerBPos: game.playerBPos 
-                         });
-                        game.playerA.send(gameUpdate);
-                        game.playerB.send(gameUpdate);
-                        if(game.CurrentTurn == "A"){
-                            game.playerA.send(JSON.stringify({
-                                type: "disableRoll"
-                            }));
-                            game.playerB.send(JSON.stringify({
-                                type: "enableRoll"
-                            }));
-                            game.CurrentTurn = "B";
+                        if(game.playerAPos == 100){
+                            game.winner = "A";
+                            game.gameState = "Completed";
+                        }else if(game.playerBPos == 100){
+                            game.winner = "B"
+                            game.gameState = "Completed";
                         }else{
-                            game.playerB.send(JSON.stringify({
-                                type: "disableRoll"
-                            }));
-                            game.playerA.send(JSON.stringify({
-                                type: "enableRoll"
-                            }));
-                            game.CurrentTurn = "A";
+                            game.winner = -1;
                         }
-                        break;
-                    case 3:
                         var gameUpdate = JSON.stringify({
                             type: "gameUpdate",
                             playerAPos: game.playerAPos,
                             playerBPos: game.playerBPos,
-                            playerCPos: game.playerCPos
-                        });
+                            won: game.winner,
+                            gameState: game.gameState
+                         });
                         game.playerA.send(gameUpdate);
                         game.playerB.send(gameUpdate);
-                        game.playerC.send(gameUpdate);
+                        if(game.winner == -1){
+                            if(game.CurrentTurn == "A"){
+                                game.playerA.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerB.send(JSON.stringify({
+                                    type: "enableRoll"
+                                }));
+                                game.CurrentTurn = "B";
+                            }else{
+                                game.playerB.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerA.send(JSON.stringify({
+                                    type: "enableRoll"
+                                }));
+                                game.CurrentTurn = "A";
+                            }
+                        }
                         break;
-                    case 4:
+                    case 3:
+                        if(game.playerAPos == 100){
+                            game.winner = "A";
+                            game.gameState = "Completed";
+                        }else if(game.playerBPos == 100){
+                            game.winner = "B"
+                            game.gameState = "Completed";
+                        }else if(game.playerCPos == 100){
+                            game.winner = "C";
+                            game.gameState = "Completed";
+                        }else{
+                            game.winner = -1;
+                        }
+                        if(game.playerAPos == 100 || game.playerBPos == 100 || game.playerCPos == 100){
+                            won = true;
+                        }
                         var gameUpdate = JSON.stringify({
                             type: "gameUpdate",
                             playerAPos: game.playerAPos,
                             playerBPos: game.playerBPos,
                             playerCPos: game.playerCPos,
-                            playerDPos: game.playerDPos
+                            won: game.winner,
+                            gameState: game.gameState
+                        });
+                        game.playerA.send(gameUpdate);
+                        game.playerB.send(gameUpdate);
+                        game.playerC.send(gameUpdate);
+                        if(game.winner == -1){
+                            if(game.CurrentTurn == "A"){
+                                game.playerA.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerB.send(JSON.stringify({
+                                    type: "enableRoll"
+                                }));
+                                game.playerC.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.CurrentTurn = "B";
+                            }else if(game.CurrentTurn == "B"){
+                                game.playerB.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerC.send(JSON.stringify({
+                                    type: "enableRoll"
+                                }));
+                                game.playerB.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.CurrentTurn = "C";
+                            }else{
+                                game.playerB.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerA.send(JSON.stringify({
+                                    type: "enableRoll"
+                                }));
+                                game.playerC.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.CurrentTurn = "A";
+                            }
+                        }
+                        break;
+                    case 4:
+                        if(game.playerAPos == 100){
+                            game.winner = "A";
+                            game.gameState = "Completed";
+                        }else if(game.playerBPos == 100){
+                            game.winner = "B";
+                            game.gameState = "Completed";
+                        }else if(game.playerCPos == 100){
+                            game.winner = "C";
+                            game.gameState = "Completed";
+                        }else if(game.playerDPos == 100){
+                            game.winner = "D";
+                            game.gameState = "Completed";
+                        }else{
+                            game.winner = -1;
+                        }
+                        var gameUpdate = JSON.stringify({
+                            type: "gameUpdate",
+                            playerAPos: game.playerAPos,
+                            playerBPos: game.playerBPos,
+                            playerCPos: game.playerCPos,
+                            playerDPos: game.playerDPos,
+                            won: game.winner,
+                            gameState: game.gameState
                         });
                         game.playerA.send(gameUpdate);
                         game.playerB.send(gameUpdate);
                         game.playerC.send(gameUpdate);
                         game.playerD.send(gameUpdate);
-                        break;    
-
+                        if(game.winner == -1){
+                            if(game.CurrentTurn == "A"){
+                                game.playerB.send(JSON.stringify({
+                                    type: "enableRoll"
+                                }));
+                                game.playerA.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerC.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerD.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.CurrentTurn = "B";
+                            }else if(game.CurrentTurn == "B"){
+                                game.playerC.send(JSON.stringify({
+                                    type: "enableRoll"
+                                }));
+                                game.playerA.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerB.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerD.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.CurrentTurn = "C";
+                            } else if(game.CurrentTurn == "C"){
+                                game.playerD.send(JSON.stringify({
+                                    type: "enableRoll"
+                                }));
+                                game.playerA.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerB.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerC.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.CurrentTurn = "D";
+                            }   else{
+                                game.playerA.send(JSON.stringify({
+                                    type: "enableRoll"
+                                }));
+                                game.playerD.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerB.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.playerC.send(JSON.stringify({
+                                    type: "disableRoll"
+                                }));
+                                game.CurrentTurn = "A";
+                            }
+                        }
+                        break;
                 }
                 break;
             case "initialize":
@@ -143,6 +286,9 @@ socketServer.on("connection", function(ws){
                                 element.playerC = -2;
                                 element.playerD = -2;
                                 element.gameState = "Ongoing";
+                                element.playerA.send(JSON.stringify({
+                                    type: "enableRoll"
+                                }));
                             }
                             found = true;
                         }else if(element.playerC == -1){
@@ -155,6 +301,9 @@ socketServer.on("connection", function(ws){
                             if(element.numPlayers == 3){
                                 element.playerD = -2;
                                 element.gameState = "Ongoing";
+                                element.playerA.send(JSON.stringify({
+                                    type: "enableRoll"
+                                }));
                             }
                             found = true;
                         }else if(element.playerD == -1){
@@ -166,6 +315,9 @@ socketServer.on("connection", function(ws){
                             }));
                             if(element.numPlayers == 4){
                                 element.gameState = "Ongoing";
+                                element.playerA.send(JSON.stringify({
+                                    type: "enableRoll"
+                                }));
                             }
                             found = true;
                         }
@@ -183,6 +335,7 @@ socketServer.on("connection", function(ws){
                         playerCPos: 1,
                         playerDPos: 1,
                         CurrentTurn: "A",
+                        winner: -1,
                         gameState: "Waiting"
                     });
 
@@ -191,15 +344,96 @@ socketServer.on("connection", function(ws){
                         gameId: games.length -1,
                         playerTag: "A"
                     }));
-
-                    console.log("Created new game object");
-                    console.log(games);
                 }
                 break;
                 
         }
         console.log("[LOG] " + message);
     });
+
+    ws.on("close", function(kek){
+        console.log("player left");
+        for (let index = 0; index < games.length; index++) {
+            const game = games[index];
+            if(game.winner == -1){
+                console.log("left ongoing game");
+                if(game.playerA == ws){
+                    console.log("player A Left");
+                    game.gameState  = "Abandon";
+                    try {
+                        game.playerB.send(JSON.stringify({
+                            type: "gameUpdate",
+                            gameState: game.gameState
+                        }));
+                        game.playerC.send(JSON.stringify({
+                            type: "gameUpdate",
+                            gameState: game.gameState
+                        }));
+                        game.playerD.send(JSON.stringify({
+                            type: "gameUpdate",
+                            gameState: game.gameState
+                        }));
+                    } catch (error) {
+                        
+                    }
+                }else if(game.playerB == ws){
+                    game.gameState = "Abandon";
+                    try {
+                        game.playerA.send(JSON.stringify({
+                            type: "gameUpdate",
+                            gameState: game.gameState
+                        }));
+                        game.playerC.send(JSON.stringify({
+                            type: "gameUpdate",
+                            gameState: game.gameState
+                        }));
+                        game.playerD.send(JSON.stringify({
+                            type: "gameUpdate",
+                            gameState: game.gameState
+                        }));
+                    } catch (error) {
+                        
+                    }
+                }else if(game.playerC == ws){
+                    game.gameState = "Abandon";
+                    try {
+                        game.playerB.send(JSON.stringify({
+                            type: "gameUpdate",
+                            gameState: game.gameState
+                        }));
+                        game.playerA.send(JSON.stringify({
+                            type: "gameUpdate",
+                            gameState: game.gameState
+                        }));
+                        game.playerD.send(JSON.stringify({
+                            type: "gameUpdate",
+                            gameState: game.gameState
+                        }));
+                    } catch (error) {
+                        
+                    }
+                }else if(game.playerD == ws){
+                    game.gameState = "Abandon";
+                    try {
+                        game.playerB.send(JSON.stringify({
+                            type: "gameUpdate",
+                            gameState: game.gameState
+                        }));
+                        game.playerC.send(JSON.stringify({
+                            type: "gameUpdate",
+                            gameState: game.gameState
+                        }));
+                        game.playerA.send(JSON.stringify({
+                            type: "gameUpdate",
+                            gameState: game.gameState
+                        }));
+                    } catch (error) {
+                        
+                    }
+                }
+            }
+        }
+    })
 });
 
 function rollRandomDice(){
@@ -211,23 +445,33 @@ function initializeBoard(){
         board[index] = -1;
     }
 
-    //snakes
-    board[99]=21; board[95]=75; board[93]=89; board[78]=25; board[52]=28; board[16]=8;
-    //ladders
-    board[2]=45; board[4]=27; board[9]=31; board[47]=84; board[70]=87; board[71]=91;
+    //Testing
+    board[2]=99;board[3]=99;board[4]=99;board[5]=99;board[6]=99;board[7]=99;
+
+    // //snakes
+    // board[99]=21; board[95]=75; board[93]=89; board[78]=25; board[52]=28; board[16]=8;
+    // //ladders
+    // board[2]=45; board[4]=27; board[9]=31; board[47]=84; board[70]=87; board[71]=91;
+}
+
+var i_kek = 0;
+function kek(input){
+    var str = (input) ? input:i_kek++;
+    console.log("kek " + str);
 }
 
 function validateMove(position){
-    if(position < 100 || position === 100){
+    if(position < 100){
         if(board[position] == -1){
             return position;
         }else{
             return board[position];
         }
+    }else if(position == 100){
+        return 100;
     }else{
         return -2;
     }
 }
 
 server.listen(port);
-

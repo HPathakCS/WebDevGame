@@ -54,6 +54,8 @@ var gameId;
 function startGame(numPlayers){
     document.getElementById("playerButtons").remove();
     var rollDiceButton = document.getElementById("rollDiceButton");
+    var statusText = document.getElementById("statusText");
+    var colorText = document.getElementById("colorText");
 
     console.log("Starting a " + numPlayers + " player game");
 
@@ -64,12 +66,14 @@ function startGame(numPlayers){
                 type: "initialize",
                 numPlayers: numPlayers
         }));
+        statusText.innerText = "Waiting for players";
         console.log("sent initlialize packet");
     }
 
 
     socket.onmessage = function(event){
         var json = JSON.parse(event.data);
+        console.log(json);
         switch(json.type){
             case "roll":
                 console.log("Server rolled " + json.roll);
@@ -80,39 +84,82 @@ function startGame(numPlayers){
                 if(playerTag != "A"){
                     rollDiceButton.disabled = true;
                 }
+                switch(json.playerTag){
+                    case "A":
+                        colorText.innerText = "Red";
+                        break;
+                    case "B":
+                        colorText.innerText="Blue";
+                        break;
+                    case "C":
+                        colorText.innerText="Green";
+                        break;
+                    case "D":
+                        colorText.innerText="Black";
+                        break;
+                }
                 gameId = json.gameId;
                 break;
             case "gameUpdate":
-                switch(numPlayers){
-                    case 2:
-                        clearCanvas();
-                        drawOnCanvas(1, json.playerAPos);
-                        drawOnCanvas(2, json.playerBPos);
+                switch(json.gameState){
+                    case "Ongoing":
+                        switch(numPlayers){
+                            case 2:
+                                clearCanvas();
+                                drawOnCanvas(1, json.playerAPos);
+                                drawOnCanvas(2, json.playerBPos);
+                                break;
+                            case 3:
+                                clearCanvas();
+                                drawOnCanvas(1, json.playerAPos);
+                                drawOnCanvas(2, json.playerBPos);
+                                drawOnCanvas(3, json.playerCPos);
+                                break;
+                            case 4:
+                                clearCanvas();
+                                drawOnCanvas(1, json.playerAPos);
+                                drawOnCanvas(2, json.playerBPos);
+                                drawOnCanvas(3, json.playerCPos);
+                                drawOnCanvas(4, json.playerDPos);
+                                break;
+                        }
                         break;
-                    case 3:
-                        clearCanvas();
-                        drawOnCanvas(1, json.playerAPos);
-                        drawOnCanvas(2, json.playerBPos);
-                        drawOnCanvas(3, json.playerCPos);
+                    case "Completed":
+                        statusText.innerText = "Player " + letterToColor(json.won) + " won";
+                        rollDiceButton.hidden = true;
                         break;
-                    case 4:
-                        clearCanvas();
-                        drawOnCanvas(1, json.playerAPos);
-                        drawOnCanvas(2, json.playerBPos);
-                        drawOnCanvas(3, json.playerCPos);
-                        drawOnCanvas(4, json.playerDPos);
+                    case "Abandon":
+                        console.log("player left");
+                        
+                        statusText.innerText = "A player left the game";
+                        rollDiceButton.hidden = true;
                         break;
-
                 }
                 break;
             case "disableRoll":
+                statusText.innerText = "Another players turn";
                 rollDiceButton.disabled = true;
                 break;
             case "enableRoll":
+                statusText.innerText = "Your turn";
+                rollDiceButton.hidden = false;
                 rollDiceButton.disabled = false;
                 break;
         }
     }
+}
+
+function letterToColor(input){
+    switch(input){
+        case "A":
+            return "Red";
+        case "B":
+            return "Blue";
+        case "C":
+            return "Green";
+        case "D":
+            return "Black";
+        }
 }
 
 function rollDice(){
@@ -124,6 +171,9 @@ function rollDice(){
     }));
 };
 
+function quitGame(){
+
+}
 
 
 console.log("client.js reporting");
