@@ -51,12 +51,13 @@ function clearCanvas(){
 var socket;
 var playerTag;
 var gameId;
+var dices = ['&#9856;', '&#9857;', '&#9858;', '&#9859;', '&#9860;', '&#9861;'];
 function startGame(numPlayers){
     document.getElementById("playerButtons").remove();
     var rollDiceButton = document.getElementById("rollDiceButton");
     var statusText = document.getElementById("statusText");
     var colorText = document.getElementById("colorText");
-
+    var diceLetter = document.getElementById("diceLetter");
     console.log("Starting a " + numPlayers + " player game");
 
     socket = new WebSocket("ws://localhost:3000");
@@ -76,6 +77,7 @@ function startGame(numPlayers){
         console.log(json);
         switch(json.type){
             case "roll":
+                diceLetter.innerHTML = dices[json.roll - 1];
                 console.log("Server rolled " + json.roll);
                 break;
             case "gameJoin":
@@ -173,6 +175,19 @@ function rollDice(){
 
 function quitGame(){
 
+}
+
+var fullscreenButton = document.documentElement;
+function fullscreen(){
+    if (fullscreenButton.requestFullscreen) {
+        fullscreenButton.requestFullscreen();
+        } else if (fullscreenButton.mozRequestFullScreen) { /* Firefox */
+        fullscreenButton.mozRequestFullScreen();
+        } else if (fullscreenButton.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        fullscreenButton.webkitRequestFullscreen();
+        } else if (fullscreenButton.msRequestFullscreen) { /* IE/Edge */
+        fullscreenButton.msRequestFullscreen();
+        }
 }
 
 

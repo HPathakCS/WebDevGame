@@ -14,8 +14,16 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 
 app.get("/play", indexRouter);
-app.get("/*", indexRouter);
+app.get('/*', (req, res) => {
+    //example of data to render; here gameStatus is an object holding this information
+    res.render('splash.ejs', { gamesStarted: stats.gamesStarted, gamesOngoing: stats.gamesOngoing, gamesCompleted: stats.gamesCompleted });
+})
 
+var stats = {
+    gamesStarted: 0,
+    gamesOngoing: 0,
+    gamesCompleted: 0,
+};
 var games = [];
 var board = [];
 initializeBoard();
@@ -70,9 +78,13 @@ socketServer.on("connection", function(ws){
                 switch(game.numPlayers){
                     case 2:
                         if(game.playerAPos == 100){
+                            stats.gamesCompleted++;
+                            stats.gamesOngoing--;
                             game.winner = "A";
                             game.gameState = "Completed";
                         }else if(game.playerBPos == 100){
+                            stats.gamesCompleted++;
+                            stats.gamesOngoing--;
                             game.winner = "B"
                             game.gameState = "Completed";
                         }else{
@@ -109,12 +121,18 @@ socketServer.on("connection", function(ws){
                         break;
                     case 3:
                         if(game.playerAPos == 100){
+                            stats.gamesCompleted++;
+                            stats.gamesOngoing--;
                             game.winner = "A";
                             game.gameState = "Completed";
                         }else if(game.playerBPos == 100){
+                            stats.gamesCompleted++;
+                            stats.gamesOngoing--;
                             game.winner = "B"
                             game.gameState = "Completed";
                         }else if(game.playerCPos == 100){
+                            stats.gamesCompleted++;
+                            stats.gamesOngoing--;
                             game.winner = "C";
                             game.gameState = "Completed";
                         }else{
@@ -173,15 +191,23 @@ socketServer.on("connection", function(ws){
                         break;
                     case 4:
                         if(game.playerAPos == 100){
+                            stats.gamesCompleted++;
+                            stats.gamesOngoing--;
                             game.winner = "A";
                             game.gameState = "Completed";
                         }else if(game.playerBPos == 100){
+                            stats.gamesCompleted++;
+                            stats.gamesOngoing--;
                             game.winner = "B";
                             game.gameState = "Completed";
                         }else if(game.playerCPos == 100){
+                            stats.gamesCompleted++;
+                            stats.gamesOngoing--;
                             game.winner = "C";
                             game.gameState = "Completed";
                         }else if(game.playerDPos == 100){
+                            stats.gamesCompleted++;
+                            stats.gamesOngoing--;
                             game.winner = "D";
                             game.gameState = "Completed";
                         }else{
@@ -283,6 +309,7 @@ socketServer.on("connection", function(ws){
                                 playerTag: "B"
                             }));
                             if(element.numPlayers == 2){
+                                stats.gamesOngoing++;
                                 element.playerC = -2;
                                 element.playerD = -2;
                                 element.gameState = "Ongoing";
@@ -299,6 +326,7 @@ socketServer.on("connection", function(ws){
                                 playerTag: "C"
                             }));
                             if(element.numPlayers == 3){
+                                stats.gamesOngoing++;
                                 element.playerD = -2;
                                 element.gameState = "Ongoing";
                                 element.playerA.send(JSON.stringify({
@@ -314,6 +342,7 @@ socketServer.on("connection", function(ws){
                                 playerTag: "D"
                             }));
                             if(element.numPlayers == 4){
+                                stats.gamesOngoing++;
                                 element.gameState = "Ongoing";
                                 element.playerA.send(JSON.stringify({
                                     type: "enableRoll"
@@ -324,6 +353,7 @@ socketServer.on("connection", function(ws){
                     }
                 };
                 if(!found){
+                    stats.gamesStarted++;
                     games.push({
                         numPlayers: msg.numPlayers,
                         playerA: ws, //Websocket of player

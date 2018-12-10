@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/game.css">
 </head>
-<h1>Snakes and Ladders</h1>
+<h1 class="title">Snakes and Ladders</h1>
 <section id="playerButtons">
     <button class="playerSelector" id="2player" onclick="startGame(2)">2 Player</button>
     <button class="playerSelector" id="3player" onclick="startGame(3)">3 Player</button>
@@ -23,9 +23,11 @@
         <h2 id="colorText"></h2>
     </div>
     <button id="rollDiceButton" onclick="rollDice()" hidden>Roll Dice</button>
+    <div id="diceLetter"></div>
 </section>
 <body>
     <canvas id="gameCanvas" width="700" height="700"></canvas>
+    <button id="toggleFullScreen" onclick="fullscreen()">🔍</button>
 </body>
 <script src="javascripts/client.js"></script>
 </html>

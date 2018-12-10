@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Snakes & Ladder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/splash.css">
+</head>
+<body>
+    <main>
+        <section id="left">         
+            <h1>
+                Snakes & Ladders
+            </h1>
+            <h3 class="slide-bottom"><a href="https://www.youtube.com/user/tseries">Subscribe to T-Series</a></h3>
+            <form action="/play" method="get">
+                <button id="playButton" class="button-slide-play" type="submit">PLAY</button>
+            </form>
+            <h3><%= gamesStarted %> 
+                <%if (gamesStarted != 1) { %>
+                    games
+                <% } else { %>
+                    game
+                <% } %>
+                started
+            </h3>
+            <h3><%= gamesOngoing %> 
+                <%if (gamesOngoing != 1) { %>
+                    games
+                <% } else { %>
+                    game
+                <% } %>
+                ongoing
+            </h3>  
+            <h3><%= gamesCompleted %> 
+                <%if (gamesCompleted != 1) { %>
+                    games
+                <% } else { %>
+                    game
+                <% } %>
+                completed
+            </h3> 
+            <p id="cookie"></p>
+        </section>
+    </main>
+</body>
+<script src="javascripts/splash.js"></script>
+</html>
