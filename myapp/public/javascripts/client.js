@@ -5,7 +5,7 @@ var context = canvas.getContext("2d");
 function drawOnCanvas(player, position){
     var y=Math.floor(position/10);
     var x=Math.floor(position%10)-1;
-    var blockSize = 90;
+    var blockSize = 70;
 
     if(x===-1){
         if(y%2==0){
@@ -21,22 +21,22 @@ function drawOnCanvas(player, position){
     context.beginPath();
     switch(player){
         case 1:
-            context.arc(blockSize*x + 25, 835-(blockSize*y), 15, 0, Math.PI*2, false);
+            context.arc(blockSize*x + 20, 650-(blockSize*y), 12, 0, Math.PI*2, false);
             context.fillStyle="red";
             context.fill();
             break;
         case 2:
-            context.arc(blockSize*x + 65, 835 - (blockSize*y), 15, 0, Math.PI*2, false);
+            context.arc(blockSize*x + 50, 650 - (blockSize*y), 12, 0, Math.PI*2, false);
             context.fillStyle="blue";
             context.fill();
             break;
         case 3:
-            context.arc(blockSize*x + 25, 875 - (blockSize*y), 15, 0, Math.PI*2, false);
+            context.arc(blockSize*x + 20, 680 - (blockSize*y), 12, 0, Math.PI*2, false);
             context.fillStyle="green";
             context.fill();
             break;
         case 4:
-            context.arc(blockSize*x + 65, 875 - (blockSize*y), 15, 0, Math.PI*2, false);
+            context.arc(blockSize*x + 50, 680 - (blockSize*y), 12, 0, Math.PI*2, false);
             context.fillStyle="black";
             context.fill();
             break;

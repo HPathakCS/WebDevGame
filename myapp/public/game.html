@@ -9,9 +9,9 @@
 </head>
 <h1>Snakes and Ladders</h1>
 <section id="playerButtons">
-    <button id="2player" onclick="startGame(2)">2 Player</button>
-    <button id="3player" onclick="startGame(3)">3 Player</button>
-    <button id="4player" onclick="startGame(4)">4 Player</button>
+    <button class="playerSelector" id="2player" onclick="startGame(2)">2 Player</button>
+    <button class="playerSelector" id="3player" onclick="startGame(3)">3 Player</button>
+    <button class="playerSelector" id="4player" onclick="startGame(4)">4 Player</button>
 </section>
 <section id="right">
     <div>
@@ -25,7 +25,7 @@
     <button id="rollDiceButton" onclick="rollDice()" hidden>Roll Dice</button>
 </section>
 <body>
-    <canvas id="gameCanvas" width="900" height="900"></canvas>
+    <canvas id="gameCanvas" width="700" height="700"></canvas>
 </body>
 <script src="javascripts/client.js"></script>
 </html>

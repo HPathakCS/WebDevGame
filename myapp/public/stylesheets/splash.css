@@ -1,12 +1,4 @@
-html, body, main, section {
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-  }
-
-body{
-    background-color: gray;
-}
+@import 'style.css';
 
 button{
     position: absolute;
@@ -25,19 +17,12 @@ button:hover{
     transition: all 2s ease;
 }
 
-h1 {
-    position: absolute;
-    font-size: 400%;
-    top: 75px;
-    left: 50px;
-    color: white;
-}
-
 #left {
     float: left;
     width: 70%;
     background-color: #AAA;
 }
+
 
 h3{
     position: relative;
@@ -63,30 +48,8 @@ h3::after{
     content: " 👌🏾";
 }
 
-@keyframes button-slide{
-    0% {
-        transform: translateX(2000px) scaleX(2) scaleY(0.5);
-        filter: blur(50px);
-        opacity: 0;
-    }
-    100%{
-        transform: translateX(0) scaleX(1) scaleY(1)
-    }
-}
-
 .button-slide-play{
     animation: button-slide 0.5s cubic-bezier(.39,.01,.62,.99)
-}
-
-@keyframes slide-bottom{
-    0% {
-        transform: translateY(2000px) scaleY(2) scaleX(0.5);
-        filter: blur(50px);
-        opacity: 0;
-    }
-    100%{
-        transform: translateX(0) scaleX(1) scaleY(1)
-    }
 }
 
 .slide-bottom{

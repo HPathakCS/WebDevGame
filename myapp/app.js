@@ -445,13 +445,13 @@ function initializeBoard(){
         board[index] = -1;
     }
 
-    //Testing
-    board[2]=99;board[3]=99;board[4]=99;board[5]=99;board[6]=99;board[7]=99;
+    // //Testing
+    // board[2]=99;board[3]=99;board[4]=99;board[5]=99;board[6]=99;board[7]=99;
 
-    // //snakes
-    // board[99]=21; board[95]=75; board[93]=89; board[78]=25; board[52]=28; board[16]=8;
-    // //ladders
-    // board[2]=45; board[4]=27; board[9]=31; board[47]=84; board[70]=87; board[71]=91;
+    //snakes
+    board[99]=21; board[95]=75; board[93]=89; board[78]=25; board[52]=28; board[16]=8;
+    //ladders
+    board[2]=45; board[4]=27; board[9]=31; board[47]=84; board[70]=87; board[71]=91;
 }
 
 var i_kek = 0;

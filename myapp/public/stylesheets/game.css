@@ -1,16 +1,61 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00b7ff;
-}
+@import 'style.css';
 
 canvas {
+  position: absolute;
   background-size: cover;
   background-image: url("../board.png");
   display: block;
   margin: 0 auto;
   align-content: center;
+}
+
+h1 {
+  position: absolute;
+  font-size: 400%;
+  border: none;
+  top: 15px;
+  left: 15px;
+  color: white;
+}
+
+h2{
+  color: white;
+  position: relative;
+}
+
+#right{
+  position: absolute;
+  top: 200px;
+  left: 15px;
+}
+
+#playerButtons{
+  position: absolute;
+  top: 130px;
+}
+
+button{
+  position: relative;
+  background-color: red;
+  color: whitesmoke;
+  font-size: 100%;
+  border: none;
+  left: 15px;
+  padding: 15px;
+}
+
+button:hover:enabled{
+  background-color: black;
+  transform: scale(1.2) rotateZ(-5deg);
+  transition: all 2s ease;
+}
+
+button:disabled{
+  background-color: black;
+}
+
+canvas{
+  position: relative;
+  top: 15px;
+  left: 250px;
 }

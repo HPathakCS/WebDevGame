@@ -1,0 +1,40 @@
+html, body, main, section {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+  }
+
+body{
+    background-color: gray;
+}
+
+h1 {
+    position: absolute;
+    font-size: 400%;
+    border: none;
+    top: 15px;
+    left: 15px;
+    color: white;
+  }
+
+@keyframes slide-bottom{
+    0% {
+        transform: translateY(2000px) scaleY(2) scaleX(0.5);
+        filter: blur(50px);
+        opacity: 0;
+    }
+    100%{
+        transform: translateX(0) scaleX(1) scaleY(1)
+    }
+}
+
+@keyframes button-slide{
+    0% {
+        transform: translateX(2000px) scaleX(2) scaleY(0.5);
+        filter: blur(50px);
+        opacity: 0;
+    }
+    100%{
+        transform: translateX(0) scaleX(1) scaleY(1)
+    }
+}
