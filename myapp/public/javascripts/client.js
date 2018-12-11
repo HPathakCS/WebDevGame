@@ -1,47 +1,74 @@
 var canvas = document.getElementById("gameCanvas");
 var context = canvas.getContext("2d");
 
-
 function drawOnCanvas(player, position){
-    var y=Math.floor(position/10);
-    var x=Math.floor(position%10)-1;
-    var blockSize = 70;
-
-    if(x===-1){
-        if(y%2==0){
-            x=0;
-        }else{
-            x=9;
-            y--;
+    if(position==100){
+        context.beginPath();
+        switch(player){
+            case 1:
+                context.arc(20, 20, 12, 0, Math.PI*2, false);
+                context.fillStyle="red";
+                context.fill();
+            break;
+            case 2:
+                context.arc(50, 20, 12, 0, Math.PI*2, false);
+                context.fillStyle="blue";
+                context.fill();
+            break;
+            case 3:
+                context.arc(20, 50, 12, 0, Math.PI*2, false);
+                context.fillStyle="green";
+                context.fill();
+            break;
+            case 4:
+                context.arc(50, 50, 12, 0, Math.PI*2, false);
+                context.fillStyle="black";
+                context.fill();
+            break;
         }
-    }else if(y%2!=0){
-        x=9-x;
-    }
-
-    context.beginPath();
-    switch(player){
-        case 1:
-            context.arc(blockSize*x + 20, 650-(blockSize*y), 12, 0, Math.PI*2, false);
-            context.fillStyle="red";
-            context.fill();
-            break;
-        case 2:
-            context.arc(blockSize*x + 50, 650 - (blockSize*y), 12, 0, Math.PI*2, false);
-            context.fillStyle="blue";
-            context.fill();
-            break;
-        case 3:
-            context.arc(blockSize*x + 20, 680 - (blockSize*y), 12, 0, Math.PI*2, false);
-            context.fillStyle="green";
-            context.fill();
-            break;
-        case 4:
-            context.arc(blockSize*x + 50, 680 - (blockSize*y), 12, 0, Math.PI*2, false);
-            context.fillStyle="black";
-            context.fill();
-            break;
-    }
         context.closePath();
+    }else{
+
+        var y=Math.floor(position/10);
+        var x=Math.floor(position%10)-1;
+        var blockSize = 70;
+    
+        if(x===-1){
+            if(y%2==0){
+                x=0;
+            }else{
+                x=9;
+                y--;
+            }
+        }else if(y%2!=0){
+            x=9-x;
+        }
+    
+        context.beginPath();
+        switch(player){
+            case 1:
+                context.arc(blockSize*x + 20, 650-(blockSize*y), 12, 0, Math.PI*2, false);
+                context.fillStyle="red";
+                context.fill();
+                break;
+            case 2:
+                context.arc(blockSize*x + 50, 650 - (blockSize*y), 12, 0, Math.PI*2, false);
+                context.fillStyle="blue";
+                context.fill();
+                break;
+            case 3:
+                context.arc(blockSize*x + 20, 680 - (blockSize*y), 12, 0, Math.PI*2, false);
+                context.fillStyle="green";
+                context.fill();
+                break;
+            case 4:
+                context.arc(blockSize*x + 50, 680 - (blockSize*y), 12, 0, Math.PI*2, false);
+                context.fillStyle="black";
+                context.fill();
+                break;
+        }
+            context.closePath();
+    }
 }
 
 function clearCanvas(){
@@ -60,7 +87,7 @@ function startGame(numPlayers){
     var diceLetter = document.getElementById("diceLetter");
     console.log("Starting a " + numPlayers + " player game");
 
-    socket = new WebSocket("ws://localhost:3000");
+    socket = new WebSocket("ws://145.94.170.121:3000");
     socket.onopen = function(){
         console.log("connected");
         socket.send(JSON.stringify({
