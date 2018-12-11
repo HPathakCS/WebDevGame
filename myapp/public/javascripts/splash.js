@@ -1,7 +1,7 @@
 if(!document.cookie == 0){
     document.cookie++;
 }else{
-    document.cookie = 0;
+    document.cookie = 1;
 }
 
 var cookieText = document.getElementById("cookie");

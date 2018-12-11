@@ -7,6 +7,9 @@ canvas {
   display: block;
   margin: 0 auto;
   align-content: center;
+  left: 40%;
+  top: 15px;
+  
 }
 
 h1 {
@@ -28,6 +31,7 @@ h2{
   top: 200px;
   left: 15px;
   height: 50%;
+  width: 30%;
 }
 
 #playerButtons{
