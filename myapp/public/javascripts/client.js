@@ -155,6 +155,20 @@ function startGame(numPlayers){
                         break;
                     case "Completed":
                         statusText.innerText = "Player " + letterToColor(json.won) + " won";
+                        switch(json.won){
+                            case "A":
+                                drawOnCanvas(1, 100);
+                                break;
+                            case "B":
+                                drawOnCanvas(2, 100);
+                                break;
+                            case "C":
+                                drawOnCanvas(3, 100);
+                                break;
+                            case "D":
+                                drawOnCanvas(4, 100);
+                                break;
+                        }
                         rollDiceButton.hidden = true;
                         break;
                     case "Abandon":
