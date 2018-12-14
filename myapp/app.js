@@ -6,26 +6,33 @@ var port = process.argv[2];
 var app = express();
 var server = http.createServer(app);
 
+//Create websocket server
 const WebSocket = require('ws');
 const socketServer = new WebSocket.Server({ server });
 
-
+//Set view engine
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 
+//Set the routes of the website
 app.get("/play", indexRouter);
 app.get('/*', (req, res) => {
     //example of data to render; here gameStatus is an object holding this information
     res.render('splash.ejs', { gamesStarted: stats.gamesStarted, gamesOngoing: stats.gamesOngoing, gamesCompleted: stats.gamesCompleted });
 })
 
+//Object to save overall game stats.
 var stats = {
     gamesStarted: 0,
     gamesOngoing: 0,
     gamesCompleted: 0,
 };
+
+//Array which stores every ongoing game.
 var games = [];
+//Array to store positions of snakes and ladders.
 var board = [];
+//Sets the positions of snakes and ladder
 initializeBoard();
 
 // var game = {
@@ -43,13 +50,16 @@ initializeBoard();
 //     gameState: //"Completed", "Waiting", "Ongoing", "Abandon"
 // }
 
+//Client makes a connection to server
 socketServer.on("connection", function(ws){
     kek();
     console.log("Connection made");
+    //Client sends a msg to server
     ws.on("message", function incoming(message) {
         var msg = JSON.parse(message);
         switch(msg.type){
             case "rollDice":
+            //Client requests to roll dice
             var game = games[msg.gameId];
             var diceResult = rollRandomDice();
             ws.send(JSON.stringify({
@@ -289,6 +299,7 @@ socketServer.on("connection", function(ws){
                 }
                 break;
             case "initialize":
+            //New client joins a game
                 var found = false;
                 for (let index = 0; index < games.length; index++) {
                     const element = games[index];  
@@ -381,6 +392,7 @@ socketServer.on("connection", function(ws){
         console.log("[LOG] " + message);
     });
 
+    //Player leaves the game
     ws.on("close", function(kek){
         console.log("player left");
         for (let index = 0; index < games.length; index++) {
@@ -490,6 +502,7 @@ function kek(input){
     console.log("kek " + str);
 }
 
+//Checks if there is a snake or ladder at the new position.
 function validateMove(position){
     if(position < 100){
         if(board[position] == -1){

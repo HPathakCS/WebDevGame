@@ -1,6 +1,7 @@
 var canvas = document.getElementById("gameCanvas");
 var context = canvas.getContext("2d");
 
+//Draws the player circles on the canvas using the position.
 function drawOnCanvas(player, position){
     if(position==100){
         context.beginPath();
@@ -79,8 +80,10 @@ function clearCanvas(){
 var socket;
 var playerTag;
 var gameId;
+//Dice value picture
 var dices = ['&#9856;', '&#9857;', '&#9858;', '&#9859;', '&#9860;', '&#9861;'];
 function startGame(numPlayers){
+    //Getting stuff from the html so it can be changed.
     document.getElementById("playerButtons").remove();
     var rollDiceButton = document.getElementById("rollDiceButton");
     var statusText = document.getElementById("statusText");
@@ -88,9 +91,12 @@ function startGame(numPlayers){
     var diceLetter = document.getElementById("diceLetter");
     console.log("Starting a " + numPlayers + " player game");
 
+    //Connect client to server
     socket = new WebSocket("ws://localhost:3000");
+    //When connection open run the code inside.
     socket.onopen = function(){
         console.log("connected");
+        //Once connection open tell server you want to play x player game
         socket.send(JSON.stringify({
                 type: "initialize",
                 numPlayers: numPlayers
@@ -99,16 +105,18 @@ function startGame(numPlayers){
         console.log("sent initlialize packet");
     }
 
-
+    //Code runs when server sends msg.
     socket.onmessage = function(event){
         var json = JSON.parse(event.data);
         console.log(json);
         switch(json.type){
+            //Server sends a roll dice msg.
             case "roll":
                 diceLetter.innerHTML = dices[json.roll - 1];
                 console.log("Server rolled " + json.roll);
                 break;
             case "gameJoin":
+            //Sent when you are added to a open lobby
                 console.log("We are player " + json.playerTag + " in gameId " + json.gameId);
                 playerTag = json.playerTag;
                 if(playerTag != "A"){
@@ -131,6 +139,7 @@ function startGame(numPlayers){
                 gameId = json.gameId;
                 break;
             case "gameUpdate":
+            //When a player changes position in the game.
                 switch(json.gameState){
                     case "Ongoing":
                         switch(numPlayers){
@@ -182,6 +191,7 @@ function startGame(numPlayers){
                 }
                 break;
             case "disableRoll":
+            //When not your turn disable
                 statusText.innerText = "Another players turn";
                 rollDiceButton.disabled = true;
                 break;
@@ -194,6 +204,7 @@ function startGame(numPlayers){
     }
 }
 
+//Convert player number to player letter
 function letterToColor(input){
     switch(input){
         case "A":
@@ -207,6 +218,7 @@ function letterToColor(input){
         }
 }
 
+//Tell the server to roll dice
 function rollDice(){
     console.log("button click");
     socket.send(JSON.stringify({
@@ -216,10 +228,8 @@ function rollDice(){
     }));
 };
 
-function quitGame(){
 
-}
-
+//Functions to request fullscreen mode.
 var fullscreenButton = document.documentElement;
 function fullscreen(){
     if (fullscreenButton.requestFullscreen) {
