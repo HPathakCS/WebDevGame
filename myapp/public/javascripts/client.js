@@ -38,8 +38,8 @@ function drawOnCanvas(player, position){
                 x=0;
             }else{
                 x=9;
-                y--;
             }
+            y--;
         }else if(y%2!=0){
             x=9-x;
         }
@@ -71,6 +71,7 @@ function drawOnCanvas(player, position){
     }
 }
 
+
 function clearCanvas(){
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -87,7 +88,7 @@ function startGame(numPlayers){
     var diceLetter = document.getElementById("diceLetter");
     console.log("Starting a " + numPlayers + " player game");
 
-    socket = new WebSocket("ws://145.94.170.121:3000");
+    socket = new WebSocket("ws://localhost:3000");
     socket.onopen = function(){
         console.log("connected");
         socket.send(JSON.stringify({
@@ -155,6 +156,7 @@ function startGame(numPlayers){
                         break;
                     case "Completed":
                         statusText.innerText = "Player " + letterToColor(json.won) + " won";
+                        clearCanvas();
                         switch(json.won){
                             case "A":
                                 drawOnCanvas(1, 100);
