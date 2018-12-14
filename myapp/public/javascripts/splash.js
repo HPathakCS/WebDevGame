@@ -1,3 +1,4 @@
+//Client Side Cookie Code   
 if(!document.cookie == 0){
     document.cookie++;
 }else{
